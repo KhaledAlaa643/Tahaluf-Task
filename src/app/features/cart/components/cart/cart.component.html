@@ -1,0 +1,65 @@
+<div class="max-w-3xl mx-auto py-10 px-4 space-y-6">
+
+  <div class="flex items-center gap-4">
+    <p-button icon="pi pi-arrow-left" severity="secondary" text (onClick)="goBack()" />
+    <h1 class="text-2xl font-bold text-gray-800">Your Cart</h1>
+  </div>
+
+  @if (items$().length === 0) {
+    <div class="text-center py-20 text-gray-400">
+      <p class="text-lg">Your cart is empty</p>
+      <p-button label="Browse Pizzas" class="mt-4" (onClick)="goBack()" />
+    </div>
+  } @else {
+    @for (item of items$(); track item.pizzaId; let i = $index) {
+      <div class="bg-white rounded-xl shadow p-4 space-y-2">
+        <div class="flex justify-between items-center">
+          <div>
+            <h2 class="font-bold text-gray-800">{{ item.pizzaName }}</h2>
+            <p class="text-sm text-gray-400">{{ item.restaurantName }}</p>
+          </div>
+          <p-button icon="pi pi-times" severity="danger" text (onClick)="removeItem(i)" />
+        </div>
+
+        @if (item.selectedToppings.length > 0) {
+          <div class="flex flex-wrap gap-2">
+            @for (topping of item.selectedToppings; track topping.id) {
+              <span class="text-xs bg-green-100 text-green-700 px-2 py-1 rounded-full">
+                {{ topping.label }} +{{ topping.price | currency:'EGP' }}
+              </span>
+            }
+          </div>
+        }
+
+        <div class="flex justify-between text-sm text-gray-500">
+          <span>Base: {{ item.basePrice | currency:'EGP' }}</span>
+          <span class="font-semibold text-gray-800">{{ item.totalPrice | currency:'EGP' }}</span>
+        </div>
+      </div>
+    }
+
+    <!-- Summary -->
+    <div class="bg-white rounded-xl shadow p-4 space-y-2">
+      <div class="flex justify-between text-gray-600">
+        <span>Subtotal</span>
+        <span>{{ subtotal() | currency:'EGP' }}</span>
+      </div>
+      @if (discount() > 0) {
+        <div class="flex justify-between text-green-600">
+          <span>Discount</span>
+          <span>- {{ discount() | currency:'EGP' }}</span>
+        </div>
+      }
+      <div class="flex justify-between font-bold text-gray-800 text-lg border-t pt-2">
+        <span>Total</span>
+        <span>{{ total() | currency:'EGP' }}</span>
+      </div>
+    </div>
+
+    <p-button 
+      label="Place Order" 
+      icon="pi pi-check" 
+      class="w-full" 
+      (onClick)="placeOrder()" />
+  }
+</div>

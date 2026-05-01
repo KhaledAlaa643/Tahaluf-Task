@@ -1,0 +1,11 @@
+<div class="grid grid-cols-1 md:grid-cols-3 gap-4 p-4">
+  @for (pizza of pizzas(); track pizza.pizzaId) {
+    <div class="border rounded-xl p-4 shadow">
+      <h2>{{ pizza.pizzaName }}</h2>
+      <p>{{ pizza.restaurantName }}</p>
+      <p>{{ pizza.estimatedDeliveryMinutes }} mins</p>
+      <p>{{ pizza.basePrice | currency }}</p>
+      <p-button label="View Details" (onClick)="goToDetails(pizza.pizzaId)" />
+    </div>
+  }
+</div>
